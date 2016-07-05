@@ -5159,9 +5159,18 @@ function doSpeedWalk(dashtype)
   mmp.speedWalkPath = mmp.deepcopy(speedWalkPath)
   speedWalkDir, speedWalkPath = {}, {}
 
+  if mmp.settings.autoprio and not dashtype then
+      if mmp.priod["mass"] then dashtype = nil
+      elseif mmp.priod["mounted"] and mmp.priod.mount="ballonwhateverthenameis" and mmp.settings.runaway then
+      elseif mmp.priod["mounted"] and mmp.settings.gallop then dashtype = "gallop"
+      elseif mmp.settings.dash then dashtype = "dash"
+      elseif mmp.settings.sprint then dashtype = "sprint"
+      else dashtype = nil end
+  end
+
   resetStopWatch(speedWalkWatch)
   startStopWatch(speedWalkWatch)
-  if mmp.settings[&quot;gallop&quot;] or mmp.settings[&quot;dash&quot;] or mmp.settings.sprint or dashtype then
+  if ((mmp.settings[&quot;gallop&quot;] or mmp.settings[&quot;dash&quot;] or mmp.settings.sprint or dashtype) and not mmp.settings.autoprio) or (mmp.settings.autoprio and dashtype) then
     mmp.fixPath(mmp.currentroom, mmp.speedWalkPath[#mmp.speedWalkPath],
       (mmp.settings[&quot;gallop&quot;] and &quot;gallop&quot;) or (mmp.settings[&quot;dash&quot;] and &quot;dash&quot;) or (mmp.settings.sprint and &quot;sprint&quot;) or (mmp.settings.runaway and &quot;runaway&quot;) or dashtype)
   end
